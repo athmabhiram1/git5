@@ -1,2 +1,172 @@
-Initial commit
-edited initial commit 
+PART A — What to do in Git Bash (from zero to rebase)
+1. Open Git Bash and go to your project directory
+cd path/to/your/project
+
+
+If Git is not initialized yet:
+
+git init
+
+2. Check your branches
+git branch
+
+
+You should see:
+
+* main
+  fb
+
+
+If fb does not exist, create it:
+
+git branch fb
+
+3. Add a file and make the first commit on main
+
+GitHub cannot track anything without a commit.
+
+echo "Initial commit" > file.txt
+git add .
+git commit -m "Initial commit on main"
+
+4. Create a GitHub repository (IMPORTANT)
+On GitHub:
+
+Go to github.com
+
+Click New Repository
+
+Repository name → any name
+
+DO NOT initialize with README
+
+Click Create Repository
+
+You will get a repo URL like:
+
+https://github.com/username/reponame.git
+
+5. Connect local repo to GitHub
+git remote add origin https://github.com/username/reponame.git
+
+
+Verify:
+
+git remote -v
+
+6. Push main branch to GitHub
+git push -u origin main
+
+
+Now main exists on GitHub.
+
+PART B — Work on fb branch and push it
+7. Switch to fb
+git checkout fb
+
+8. Make changes in fb
+echo "Feature branch change" >> file.txt
+git add .
+git commit -m "Commit from fb branch"
+
+9. Push fb to GitHub
+git push -u origin fb
+
+
+Now both main and fb exist on GitHub.
+
+PART C — Fetch + Rebase (CORE of Experiment 5)
+
+Assume someone updated main on GitHub (or you want to simulate it).
+
+10. Switch to main and make a new commit
+git checkout main
+echo "Update from main" >> file.txt
+git add .
+git commit -m "Update on main"
+git push origin main
+
+11. Switch back to fb
+git checkout fb
+
+12. Fetch latest changes from GitHub
+git fetch origin
+
+
+This updates:
+
+origin/main
+
+
+but does NOT merge anything.
+
+13. Rebase fb onto updated main
+git rebase origin/main
+
+
+What this does:
+
+Takes your fb commits
+
+Re-applies them on top of latest main
+
+Keeps linear history
+
+14. If conflict occurs (IMPORTANT FOR VIVA)
+
+If Git stops and shows conflict:
+
+Open the conflicted file
+
+Fix conflict
+
+Save file
+
+Run:
+
+git add file.txt
+git rebase --continue
+
+15. Push rebased fb (force required)
+git push origin fb --force
+
+
+Why force?
+
+Rebase rewrites history
+
+Normal push will be rejected
+
+PART D — What happens on GitHub
+
+On GitHub:
+
+main → latest clean commits
+
+fb → rebased on top of main
+
+Commit history is linear
+
+No unnecessary merge commits
+
+(Optional)
+
+You can create a Pull Request from fb → main
+
+FINAL EXAM-READY SUMMARY (VERY IMPORTANT)
+
+Commands used:
+
+git fetch origin
+git rebase origin/main
+git rebase --continue
+git push origin fb --force
+
+
+Purpose of rebase:
+
+Incorporate latest remote changes
+
+Maintain clean, linear commit history
+
+Avoid merge commits
